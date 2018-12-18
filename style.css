@@ -1,0 +1,195 @@
+body,html {
+	margin: 0;
+	padding: 0;
+}
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+}
+
+#intro {
+	width: 256px;
+	background-color: black;
+	padding-left: 15px;
+}
+
+#intro h1 {
+	color: white;
+	text-align: left;
+	font-family: Arial;
+	font-weight: bolder;
+	font-size: 20px;
+	color: #FFFFFF;
+	padding: 15px;
+	margin: 0;
+}
+
+#intro p {
+	color: white;
+	text-align: left;
+	font-family: Arial;
+	font-weight: lighter;
+	font-size: 15px;
+	padding: 15px;
+	margin: 0;
+}
+
+#intro h2 {
+	color: white;
+	text-align: left;
+	font-family: Arial;
+	font-weight: lighter;
+	font-size: 15px;
+	padding: 15px;
+	margin: 0;
+	padding-top: 60px;
+}
+
+#intro a {
+	color: #EA5504;
+	text-align: left;
+	font-family: Arial;
+	font-weight: lighter;
+	font-size: 15px;
+	margin: 0;
+}
+
+/* whole container */
+.wrap {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+/* drawing div */
+#drawing {
+	margin-top: 36px;
+	width: 1024px;
+	height: 480px;
+	background-color: black;
+}
+/* control box container */
+.control-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 15px;
+	width: 1024px;
+	background-color: black;
+}
+/* control box list */
+.control-box ul {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: #FFFFFF;
+}
+
+.control-box li {
+	margin-bottom: 20px;
+	display: inline-flex;
+	flex-direction: column;
+	width: 256px;
+	height: 50px;
+	padding: 5px;
+	clear: both;
+}
+
+/* control box item */
+.control-box-item {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+/* label style */
+.txt {
+	font-family: Arial;
+	padding: 0;
+	margin: 0;
+	float: left;
+	font-size: 12px;
+	margin-bottom: 6px;
+}
+
+/* input value */
+.input {
+	display: inline-block;
+	color: black;
+	width: 96px;
+	height: 32px;
+	border: 0px;
+	padding: 0px;
+	background: white;
+	outline: none;
+}
+
+/* input color value */
+.color-input {
+	display: inline-block;
+	color: black;
+	width: 256px;
+	height: 32px;
+	border: 0px;
+	background: white;
+	outline: none;
+}
+
+/* download btn style */
+.download-btn {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	width: 192px;
+	height: 32px;
+	/*vertical center*/
+	line-height: 32px;
+	font-family: Arial;
+	font-size: 20px;
+	font-weight: bolder;
+	background-color: #EA5504;
+	border: none;
+	color: white;
+	text-align: center;
+
+	border-radius: 16px;
+}
+
+/* range input style */
+.slider {
+	margin: 0;
+	-webkit-appearance: none;
+	width: 144px;
+	height: 32px;
+	background: gray;
+	outline: none;
+	border: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+}
+
+/* range input hover on highlight */
+.slider:hover {
+	opacity: 1;
+}
+
+/* slider style */
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 32px;
+	height: 32px;
+	background: white;
+	cursor: pointer;
+}

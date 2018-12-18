@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <!-- load vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+	<!-- load svg.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.0/svg.js"></script>
+	<title>Document</title>
+</head>
+<body>
+	<div id="intro">
+		<h1>SVG Pattern Generater</h1>
+		<p>This is a light weight SVG pattern generater, simply input the parameters or adjust the range input, and you will get a SVG pattern that generated with JavaScript. <br/><br/> Click download SVG to save it as an SVG file, you can use the pattern in Adobe Illustrator or any other vector graphics editing software.</p>
+		<h2>Contributed by <br/><a href="https://yiren-wang.com/javascript-practice-svg-pattern-generator/">Yiren Wang</a></h2>
+	</div>
+	<div id="app"></div>
+	<!-- https://cn.vuejs.org/v2/guide/components-edge-cases.html#X-Templates -->
+	<script type="text/x-template" id="template">
+		<!-- write the html, using Vue.js event listening/handling -->
+		<!-- https://cn.vuejs.org/v2/guide/events.html -->
+		<div class="wrap">
+			<div id="drawing"></div>
+			<div class="control-box">
+				<ul>
+					<li>
+						<p class="txt">Polygon Side Amount</p>
+						<div class="control-box-item">
+							<!-- Polygon Side Amount min - max -->
+							<input @change="flush" type="range" min="3" max="360" value="50" v-model="polygonSideNumber" class="slider">
+							<input @change="flush" class="input" type="text" v-model="polygonSideNumber">
+						</div>
+					</li>
+					<li>
+						<p class="txt">Polygon Rotate Angle</p>
+						<div class="control-box-item">
+							<!-- Polygon Rotate Angle min - max -->
+							<input @change="flush" type="range" min="0" max="360" value="50" v-model="angle" class="slider">
+							<input @change="flush" class="input" type="text" v-model="angle">
+						</div>
+					</li>
+					<li>
+						<p class="txt">Shape Size</p>
+						<div class="control-box-item">
+							<!-- Shape Size min - max -->
+							<input @change="flush" type="range" min="1" max="500" value="50" v-model="shapeSize" class="slider">
+							<input @change="flush" class="input" type="text" v-model="shapeSize">
+						</div>
+					</li>
+					<li>
+						<p class="txt">Shape Amount</p>
+						<div class="control-box-item">
+							<!-- Shape Amount min - max -->
+							<input @change="flush" type="range" min="1" max="100" value="50" v-model="shapeNumber" class="slider">
+							<input @change="flush" class="input" type="text" v-model="shapeNumber">
+						</div>
+					</li>
+					<li>
+						<p class="txt">Radius from Center</p>
+						<div class="control-box-item">
+							<!-- Radius from Center min - max -->
+							<input @change="flush" type="range" min="1" max="500" value="50" v-model="drawRadius" class="slider">
+							<input @change="flush" class="input" type="text" v-model="drawRadius">
+						</div>
+					</li>
+					<li>
+						<p class="txt">Color</p>
+						<input @change="flush" class="color-input" type="text" v-model="color">
+					</li>
+				</ul>
+			</div>
+			<span class="download-btn" @click="download">Download SVG</span>
+		</div>
+	</script>
+	<script>
+		const mixBlendMode = 'screen'
+
+		var app = new Vue({
+			name: 'index',
+			el: '#app',
+			template: '#template',
+			data () {
+				return {
+					polygons: [],
+					draw: null,
+					polygonSideNumber: 6,
+					angle: 60,
+					shapeSize: 360,
+					shapeNumber: 12,
+					drawRadius: 60,
+					
+					// (cx, cy) is the coordinate of polygonsDraw
+					cx: 512,
+					cy: 260,
+					color: '#EA5504',
+				}
+			},
+
+			mounted () {
+				this.draw = SVG('drawing').size('100%', '100%')
+				this.polygonsDraw()
+			},
+
+			// download SVG
+			methods: {
+				download (evt) {
+					// this.draw.svg() 
+					// https://svgjs.com/docs/2.7/importing-exporting/#import-export-svg
+					var svg = this.draw.svg();
+
+					// download svg
+					// https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
+					var svg_blob = new Blob([svg],{'type': "image/svg+xml"});
+					var url = URL.createObjectURL(svg_blob);
+					var downloadLink = document.createElement("a");
+					downloadLink.href = url;
+					downloadLink.download = 'polygons';
+					document.body.appendChild(downloadLink);
+					downloadLink.click();
+					document.body.removeChild(downloadLink);
+				},
+
+				flush () {
+
+					this.polygons.forEach((shape) => {
+						shape.remove();
+					})
+
+					this.polygonsDraw()
+				},
+
+				polygonsDraw () {
+					// shape list container
+					const shapes = []
+					for (let i = 0; i < this.shapeNumber; i++) {
+
+						// compute points' coordinate when drawing one polygon
+						// polygon points container
+						const polygonPoints = []
+						let px = 0
+						let py = 0
+						for (let j = 0; j < this.polygonSideNumber; j++) {
+							// (px,py) is the point coordinate
+							// using these two formula to count the (px, py): // x[n] = r * cos(2*pi*n/N)	// y[n] = r * sin(2*pi*n/N)
+							// https://stackoverflow.com/questions/7198144/how-to-draw-a-n-sided-regular-polygon-in-cartesian-coordinates
+							px = this.shapeSize / 2 * Math.cos(2*Math.PI * j / this.polygonSideNumber)
+							py = this.shapeSize / 2 * Math.sin(2*Math.PI * j / this.polygonSideNumber)
+							polygonPoints.push(px)
+							polygonPoints.push(py)
+						}
+
+						// fill the shape with this.color
+						const shape = this.draw.polygon(polygonPoints).fill({color: this.color, opacity: 0.6})
+						// define css style: mix-blend-mode
+						// https://css-tricks.com/almanac/properties/m/mix-blend-mode/
+						// https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode/
+						// https://codepen.io/abbeyjfitzgerald/pen/GrRqoy
+						shape.style('mix-blend-mode', mixBlendMode)
+
+
+						// compute (shapeX, shapeY)
+						// (shapeX, shapeY) is the polygon center coordinate in the drawing div
+						// for example, when i = 0, draw the first polygon on (shape0X, shape0Y)
+						// when i = 0, draw the second polygon on (shape1X, shape1Y), etc.
+						let shapeX = this.drawRadius * Math.cos(2*Math.PI * i / this.shapeNumber) + this.cx - this.shapeSize / 2
+						let shapeY = this.drawRadius * Math.sin(2*Math.PI * i / this.shapeNumber) + this.cy - this.shapeSize / 2
+
+						shape.move(shapeX, shapeY)
+
+						shape.rotate(this.angle)
+						shapes.push(shape)
+					}
+					this.polygons = shapes
+				},
+			}
+		})
+	</script>
+</body>
+</html>
