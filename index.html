@@ -92,9 +92,9 @@
 					shapeNumber: 12,
 					drawRadius: 60,
 					
-					// (cx, cy) is the coordinate of polygonsDraw
+					// (cx, cy) is the centre coordinate of polygonsDraw
 					cx: 512,
-					cy: 260,
+					cy: 240,
 					color: '#EA5504',
 				}
 			},
@@ -118,6 +118,7 @@
 					var url = URL.createObjectURL(svg_blob);
 					var downloadLink = document.createElement("a");
 					downloadLink.href = url;
+					// instead of the code in html, append the svg hear directly
 					downloadLink.download = 'polygons';
 					document.body.appendChild(downloadLink);
 					downloadLink.click();
@@ -149,29 +150,31 @@
 							// https://stackoverflow.com/questions/7198144/how-to-draw-a-n-sided-regular-polygon-in-cartesian-coordinates
 							px = this.shapeSize / 2 * Math.cos(2*Math.PI * j / this.polygonSideNumber)
 							py = this.shapeSize / 2 * Math.sin(2*Math.PI * j / this.polygonSideNumber)
+							// append vertex coordinate
 							polygonPoints.push(px)
 							polygonPoints.push(py)
 						}
 
-						// fill the shape with this.color
+						// draw polygon wiht value of (px, py) and fill the shape with this.color
 						const shape = this.draw.polygon(polygonPoints).fill({color: this.color, opacity: 0.6})
-						// define css style: mix-blend-mode
+						// define css style: mix-blend-mode on shape
 						// https://css-tricks.com/almanac/properties/m/mix-blend-mode/
 						// https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode/
 						// https://codepen.io/abbeyjfitzgerald/pen/GrRqoy
 						shape.style('mix-blend-mode', mixBlendMode)
 
 
-						// compute (shapeX, shapeY)
+						// compute the polygon center coordinate (shapeX, shapeY)
 						// (shapeX, shapeY) is the polygon center coordinate in the drawing div
 						// for example, when i = 0, draw the first polygon on (shape0X, shape0Y)
-						// when i = 0, draw the second polygon on (shape1X, shape1Y), etc.
+						// when i = 1, draw the second polygon on (shape1X, shape1Y), etc.
 						let shapeX = this.drawRadius * Math.cos(2*Math.PI * i / this.shapeNumber) + this.cx - this.shapeSize / 2
 						let shapeY = this.drawRadius * Math.sin(2*Math.PI * i / this.shapeNumber) + this.cy - this.shapeSize / 2
 
 						shape.move(shapeX, shapeY)
 
 						shape.rotate(this.angle)
+						// append shape to shapes
 						shapes.push(shape)
 					}
 					this.polygons = shapes
