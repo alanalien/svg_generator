@@ -112,6 +112,7 @@
 					var svg = this.draw.svg();
 
 					// download svg
+					// https://stackoverflow.com/questions/23582101/generating-viewing-and-saving-svg-client-side-in-browser/23589931#23589931
 					// https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
 					var svg_blob = new Blob([svg],{'type': "image/svg+xml"});
 					var url = URL.createObjectURL(svg_blob);
