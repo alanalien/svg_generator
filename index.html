@@ -115,10 +115,11 @@
 					// https://stackoverflow.com/questions/23582101/generating-viewing-and-saving-svg-client-side-in-browser/23589931#23589931
 					// https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
 					var svg_blob = new Blob([svg],{'type': "image/svg+xml"});
+					// https://developer.mozilla.org/zh-CN/docs/Web/API/Blob
 					var url = URL.createObjectURL(svg_blob);
 					var downloadLink = document.createElement("a");
 					downloadLink.href = url;
-					// instead of the code in html, append the svg hear directly
+					// instead of the code in html, append the svg here directly
 					downloadLink.download = 'polygons';
 					document.body.appendChild(downloadLink);
 					downloadLink.click();
